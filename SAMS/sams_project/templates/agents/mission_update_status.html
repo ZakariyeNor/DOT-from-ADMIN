@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mission-update-container">
+    <h1 class="section-title">Update Mission: {{ form.instance.name }}</h1>
+
+    <form method="post" class="mission-update-form">
+        {% csrf_token %}
+
+        <div class="form-section">
+            <h3>Update Status & Progress</h3>
+            {{ form.as_p }}
+        </div>
+
+        <div class="form-section">
+            <h3>Add Mission Log</h3>
+            {{ log_form.as_p }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}

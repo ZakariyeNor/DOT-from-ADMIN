@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="site-main">
+    <h1 class="section-title">{{ mission.name }}</h1>
+
+    <div class="mission-details">
+        <p><strong>Type:</strong> {{ mission.mission_type }}</p>
+        <p><strong>Status:</strong> {{ mission.status }}</p>
+        <p><strong>Start Date:</strong> {{ mission.start_date }}</p>
+        <p><strong>End Date:</strong> {{ mission.end_date|default:"N/A" }}</p>
+
+        <p><strong>Assigned Agents:</strong></p>
+        <ul class="agent-list">
+            {% for agent in mission.agents.all %}
+                <li>{{ agent.agent_code }} ({{ agent.user.username }})</li>
+            {% empty %}
+                <li>No agents assigned</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'mission_update' mission.pk %}" class="btn btn-secondary">Edit Mission</a>
+
+        <!-- Mission Logs Section -->
+        <h2>Mission Logs</h2>
+        <ul class="mission-logs">
+            {% for log in mission.logs.all %}
+                <li>
+                    {{ log.timestamp }} - 
+                    {% if log.agent %}
+                        {{ log.agent.user.username }}
+                    {% else %}
+                        System
+                    {% endif %}:
+                    {{ log.note }}
+                </li>
+            {% empty %}
+                <li>No logs yet.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Permission-based button -->
+        {% if perms.agents.can_assign_mission %}
+            <a href="{% url 'mission_update_status' mission.pk %}" class="btn btn-secondary">
+                Update Status / Add Log
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

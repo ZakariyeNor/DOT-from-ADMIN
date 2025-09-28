@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="agents-container">
+    <h1>Agents</h1>
+
+    {% if agents %}
+    <ul class="agents-list">
+        {% for agent in agents %}
+        <li class="agent-card">
+            <div class="agent-info">
+                <strong>{{ agent.agent_code }}</strong> - {{ agent.user.username }}
+                <span class="status {{ agent.status|lower }}">{{ agent.status }}</span>
+            </div>
+            
+            <div class="agent-actions">
+                {% if request.user.has_perm.agents.can_change_status %}
+                <a href="{% url 'change_agent_status' agent.id 'Inactive' %}" class="btn btn-danger">Deactivate</a>
+                <a href="{% url 'change_agent_status' agent.id 'Active' %}" class="btn btn-success">Activate</a>
+                {% endif %}
+
+                {% if request.user.has_perm.agents.can_assign_mission %}
+                <a href="{% url 'assign_agent' mission.id agent.id %}" class="btn btn-warning">Assign Agent</a>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No agents found.</p>
+    {% endif %}
+</div>
+{% endblock %}

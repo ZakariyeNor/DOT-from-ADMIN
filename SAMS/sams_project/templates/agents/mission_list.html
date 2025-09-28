@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="site-main">
+    <h1 class="section-title">Missions</h1>
+    
+    <a href="{% url 'mission_create' %}" class="btn mission-list">Create Mission</a>
+
+    
+    <ul class="mission-items">
+        {% for mission in missions %}
+            <li class="mission-item">
+                <a href="{% url 'mission_detail' mission.pk %}" class="mission-link">{{ mission.name }}</a>
+                <span class="mission-status">{{ mission.status }}</span>
+            </li>
+        {% empty %}
+            <li class="mission-item">No missions available</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
